@@ -1,0 +1,86 @@
+@use '@/styles/index' as s;
+
+.block {
+  position: relative;
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: s.$background-secondary;
+}
+
+// Высота задаётся в админке. `auto` — по пропорциям самой картинки,
+// остальные варианты режут её под нужный формат.
+.auto .frame {
+  height: auto;
+}
+
+.screen .frame {
+  // 100dvh, а не 100vh: на телефоне адресная строка съезжает, и картинка
+  // на 100vh оказывается выше экрана.
+  height: 100dvh;
+
+  @include s.media_down(md) {
+    height: 70dvh;
+  }
+}
+
+.tall .frame {
+  aspect-ratio: 2 / 1;
+
+  @include s.media_down(md) {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.short .frame {
+  aspect-ratio: 3 / 1;
+
+  @include s.media_down(md) {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gap_side);
+
+  // Затемнение поверх фотографии: без него светлый рендер съедает белый
+  // текст, и надпись читается через раз.
+  background: linear-gradient(
+    180deg,
+    rgba(20, 24, 28, 0.35) 0%,
+    rgba(20, 24, 28, 0.55) 100%
+  );
+}
+
+.overlayText {
+  max-width: 900px;
+  color: s.$text-contrast;
+  text-align: center;
+  text-wrap: balance;
+
+  @include s.text_display;
+}
+
+.caption {
+  padding-block: s.gap(3);
+  color: s.$text-secondary;
+  text-align: center;
+
+  @include s.glass(s.$width_lg);
+  @include s.text_caption;
+}

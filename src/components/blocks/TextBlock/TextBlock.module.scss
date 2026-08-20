@@ -1,0 +1,58 @@
+@use '@/styles/index' as s;
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+/* Ширина контейнера у всех блоков общая, а вот строку длиннее ~70 знаков
+   читать тяжело — ограничиваем саму колонку текста, не блок. */
+.narrow {
+  max-width: 68ch;
+}
+
+.columns {
+  display: block;
+  column-count: 2;
+  column-gap: s.gap(10);
+
+  @include s.media_down(md) {
+    column-count: 1;
+  }
+}
+
+.paragraph {
+  // Внутри колонок абзац не должен разрываться между ними — иначе конец
+  // мысли уезжает в соседний столбец.
+  break-inside: avoid;
+
+  @include s.text_body_1;
+
+  .columns & + & {
+    margin-top: s.gap(4);
+  }
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: s.gap(6);
+  margin-top: s.gap(10);
+}
+
+.item {
+  padding-top: s.gap(4);
+  border-top: 2px solid s.$stroke-primary;
+}
+
+.itemTitle {
+  @include s.text_header_3;
+}
+
+.itemText {
+  margin-top: s.gap(1);
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}

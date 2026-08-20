@@ -1,0 +1,51 @@
+@use '@/styles/index' as s;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: s.$zi_header;
+
+  background-color: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid s.$stroke-default;
+  backdrop-filter: blur(8px);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(4);
+  min-height: 72px;
+  padding-block: s.gap(3);
+
+  @include s.glass(s.$width_lg);
+
+  @include s.media_down(md) {
+    min-height: 64px;
+    padding-block: s.gap(2);
+  }
+}
+
+.logo {
+  @include s.text_header_3;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: s.gap(5);
+}
+
+.phone {
+  white-space: nowrap;
+
+  @include s.text_body_1;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include s.media_down(md) {
+    display: none;
+  }
+}

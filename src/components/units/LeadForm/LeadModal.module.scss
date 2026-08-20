@@ -1,0 +1,81 @@
+@use '@/styles/index' as s;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+  margin-top: s.gap(6);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.label {
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}
+
+.optional {
+  color: s.$text-secondary;
+  opacity: 0.7;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: s.gap(3) s.gap(4);
+
+  background-color: s.$background-default;
+  border: 1px solid s.$stroke-default;
+  border-radius: s.$br_2;
+  transition: s.$transition;
+
+  @include s.text_body_1;
+
+  &::placeholder {
+    color: s.$text-secondary;
+    opacity: 0.6;
+  }
+
+  &:focus {
+    border-color: s.$stroke-primary;
+    outline: none;
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.error {
+  color: s.$danger;
+
+  @include s.text_caption;
+}
+
+.formError {
+  padding: s.gap(3) s.gap(4);
+  color: s.$danger;
+  background-color: rgba(179, 45, 46, 0.08);
+  border-radius: s.$br_2;
+
+  @include s.text_body_2;
+}
+
+.success {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(6);
+  margin-top: s.gap(6);
+}
+
+.successText {
+  color: s.$text-secondary;
+
+  @include s.text_body_1;
+}

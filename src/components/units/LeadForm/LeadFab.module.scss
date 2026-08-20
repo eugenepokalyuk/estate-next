@@ -1,0 +1,46 @@
+@use '@/styles/index' as s;
+
+.fab {
+  position: fixed;
+  right: s.gap(6);
+  // На телефонах снизу живёт панель браузера — поднимаем кнопку над ней.
+  bottom: max(#{s.gap(6)}, env(safe-area-inset-bottom));
+  z-index: s.$zi_fab;
+
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(2);
+  padding: s.gap(4) s.gap(5);
+
+  color: s.$text-contrast;
+  background-color: s.$background-primary;
+  border: none;
+  border-radius: s.$br_full;
+  box-shadow: s.$box-shadow-strong;
+  transition: background-color s.$transition-duration s.$transition-ease;
+
+  @include s.text_button;
+
+  &:hover {
+    background-color: color-mix(in srgb, s.$primary 88%, black);
+  }
+
+  @include s.media_down(md) {
+    right: s.gap(4);
+    bottom: max(#{s.gap(4)}, env(safe-area-inset-bottom));
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.label {
+  @include s.media_down(md) {
+    @include s.visually_hidden;
+  }
+}

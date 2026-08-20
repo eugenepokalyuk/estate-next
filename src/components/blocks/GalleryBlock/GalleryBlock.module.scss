@@ -1,0 +1,144 @@
+@use '@/styles/index' as s;
+
+// === Сетка ===
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: s.gap(4);
+}
+
+.gridImage {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: s.$br_3;
+}
+
+// === Слайдер ===
+
+.slider {
+  position: relative;
+
+  /* Расстояние от края окна до границы контейнера страницы — ровно то же,
+     что даёт миксин glass. Считаем от ширины родителя (100%), а не от 100vw:
+     vw включает полосу прокрутки, и страница получала бы горизонтальный сдвиг.
+
+     Отступ ставится с ОБЕИХ сторон: слева первый слайд встаёт под заголовком
+     блока, справа последний не упирается в край окна. */
+  --slider-inset: calc(
+    (100% - min(100%, #{s.$width_lg})) / 2 + var(--gap_side)
+  );
+
+}
+
+.track {
+  display: flex;
+  gap: s.gap(4);
+
+  overflow-x: auto;
+  /* Прилипание слайдов к границам контейнера. scroll-padding — это и есть
+     то, что притягивает слайд к отступу, а не к краю окна. */
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--slider-inset);
+  padding-inline: var(--slider-inset);
+
+  /* Полосу прокрутки прячем: листают стрелками, свайпом и трекпадом,
+     а полоса под фотографиями смотрится как дефект вёрстки. */
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.slide {
+  /* Проценты в flex-basis считаются от ВНУТРЕННЕЙ ширины ленты, а она по
+     построению равна ширине контейнера страницы: боковые отступы ленты как
+     раз добирают до краёв окна. Поэтому два слайда с зазором ровно
+     заполняют контейнер. */
+  flex: 0 0 calc((100% - #{s.gap(4)}) / 2);
+  min-width: 0;
+  scroll-snap-align: start;
+
+  @include s.media_down(lg) {
+    flex-basis: calc(100% * 0.62);
+  }
+
+  @include s.media_down(md) {
+    flex-basis: 100%;
+  }
+}
+
+.slideImage {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  border-radius: s.$br_3;
+  transition: transform s.$transition-duration s.$transition-ease;
+
+  @include s.media_down(md) {
+    height: 280px;
+  }
+}
+
+/* Слайд — кнопка: по клику открывается просмотр во весь экран.
+   Сбрасываем всё, что браузер рисует кнопке по умолчанию. */
+.slideButton {
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+
+  background: none;
+  border: none;
+  border-radius: s.$br_3;
+  cursor: zoom-in;
+
+  &:hover .slideImage,
+  &:hover .gridImage {
+    transform: scale(1.02);
+  }
+}
+
+.caption {
+  margin-top: s.gap(2);
+  color: s.$text-secondary;
+  text-align: left;
+
+  @include s.text_caption;
+}
+
+.controls {
+  display: flex;
+  gap: s.gap(2);
+  margin-top: s.gap(6);
+  /* Кнопки листания — по левой границе контейнера, как заголовок блока. */
+  padding-inline: var(--slider-inset);
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+
+  color: s.$icon-default;
+  background-color: s.$background-default;
+  border: 1px solid s.$stroke-default;
+  border-radius: s.$br_full;
+  transition: s.$transition;
+
+  &:hover:not(:disabled) {
+    color: s.$icon-contrast;
+    background-color: s.$background-primary;
+    border-color: s.$background-primary;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

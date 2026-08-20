@@ -1,0 +1,83 @@
+@use 'index' as s;
+
+:root {
+  // Боковой отступ контейнера — переменной, потому что его читает миксин
+  // glass, а он один на все брейкпоинты.
+  --gap_side: #{s.$gap_side_lg};
+
+  @include s.media_down(lg) {
+    --gap_side: #{s.$gap_side_md};
+  }
+
+  @include s.media_down(md) {
+    --gap_side: #{s.$gap_side_sm};
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  // Отступ под липкую шапку — для перехода по ссылке с якорем ИЗВНЕ
+  // (открыли /object/x#map): такую прокрутку делает сам браузер.
+  // Клики по меню внутри страницы обрабатывает scrollToAnchor: полагаться
+  // на CSS-плавность нельзя, браузер может её не выполнить вовсе, и тогда
+  // переход по якорю не делает ничего.
+  scroll-padding-top: 88px;
+}
+
+body {
+  margin: 0;
+  background-color: s.$background-default;
+  color: s.$text-default;
+
+  @include s.text_body_1;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+// Видимый фокус нужен тем, кто ходит по странице с клавиатуры. Убирать его
+// нельзя, но и показывать мышью кликающим незачем — отсюда :focus-visible.
+:focus-visible {
+  outline: 2px solid s.$primary;
+  outline-offset: 2px;
+}

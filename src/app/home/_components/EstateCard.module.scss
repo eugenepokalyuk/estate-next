@@ -1,0 +1,102 @@
+@use '@/styles/index' as s;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  background-color: s.$background-default;
+  border: 1px solid s.$stroke-default;
+  border-radius: s.$br_4;
+  transition: s.$transition;
+
+  &:hover {
+    border-color: s.$stroke-primary;
+    box-shadow: s.$box-shadow;
+
+    .image {
+      transform: scale(1.03);
+    }
+  }
+}
+
+.cover {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background-color: s.$background-secondary;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform s.$transition-duration s.$transition-ease;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, s.$background-secondary, #e4e9ee);
+}
+
+.status {
+  position: absolute;
+  top: s.gap(3);
+  left: s.gap(3);
+
+  padding: s.gap(1) s.gap(3);
+  color: s.$text-contrast;
+  background-color: rgba(20, 24, 28, 0.7);
+  border-radius: s.$br_full;
+  backdrop-filter: blur(4px);
+
+  @include s.text_caption;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: s.gap(2);
+  padding: s.gap(5);
+}
+
+.kind {
+  color: s.$text-secondary;
+
+  @include s.text_overline;
+}
+
+.name {
+  @include s.text_header_2;
+}
+
+.description {
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+  @include s.line_clamp(3);
+}
+
+.footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(3);
+  // margin-top: auto прижимает цену к низу карточки: без него в сетке
+  // цены стоят на разной высоте и строка ломается визуально.
+  margin-top: auto;
+  padding-top: s.gap(4);
+}
+
+.price {
+  @include s.text_header_3;
+}
+
+.area {
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}

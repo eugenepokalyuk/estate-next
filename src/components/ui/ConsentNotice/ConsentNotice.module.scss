@@ -1,0 +1,18 @@
+@use '@/styles/index' as s;
+
+.notice {
+  color: s.$text-secondary;
+  text-align: center;
+
+  @include s.text_caption;
+}
+
+.link {
+  color: s.$text-primary;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

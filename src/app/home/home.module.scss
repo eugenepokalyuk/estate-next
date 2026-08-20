@@ -1,0 +1,49 @@
+@use '@/styles/index' as s;
+
+.main {
+  padding-block: s.gap(16) s.gap(24);
+
+  @include s.glass(s.$width_lg);
+
+  @include s.media_down(md) {
+    padding-block: s.gap(10) s.gap(16);
+  }
+}
+
+.intro {
+  max-width: 720px;
+  margin-bottom: s.gap(12);
+
+  @include s.media_down(md) {
+    margin-bottom: s.gap(8);
+  }
+}
+
+.title {
+  @include s.text_display;
+}
+
+.subtitle {
+  margin-top: s.gap(4);
+  color: s.$text-secondary;
+
+  @include s.text_body_1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: s.gap(6);
+
+  @include s.media_down(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.empty {
+  padding: s.gap(16) 0;
+  color: s.$text-secondary;
+  text-align: center;
+
+  @include s.text_body_1;
+}

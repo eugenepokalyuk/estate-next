@@ -1,0 +1,62 @@
+@use '@/styles/index' as s;
+
+.section {
+  padding: s.gap(20) 0;
+
+  @include s.media_down(md) {
+    padding: s.gap(12) 0;
+  }
+}
+
+.bg_default {
+  background-color: s.$background-default;
+}
+
+.bg_secondary {
+  background-color: s.$background-secondary;
+}
+
+/* Единственная ширина контейнера на все блоки страницы. */
+.container {
+  @include s.glass(s.$width_lg);
+}
+
+.header {
+  margin-bottom: s.gap(8);
+
+  @include s.media_down(md) {
+    margin-bottom: s.gap(6);
+  }
+}
+
+/* Блок без содержимого — отступ снизу лишний. */
+.headerLast {
+  margin-bottom: 0;
+}
+
+.overline {
+  margin-bottom: s.gap(3);
+  color: s.$text-accent;
+
+  @include s.text_overline;
+}
+
+.title {
+  /* Заголовок в строку на всю ширину контейнера не читается — ограничиваем
+     длину строки, но левую границу оставляем общей для всех блоков. */
+  max-width: 20ch;
+
+  @include s.text_header_1;
+
+  @include s.media_up(md) {
+    max-width: 24ch;
+  }
+}
+
+.intro {
+  max-width: 62ch;
+  margin-top: s.gap(4);
+  color: s.$text-secondary;
+
+  @include s.text_body_1;
+}

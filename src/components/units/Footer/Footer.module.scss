@@ -1,0 +1,144 @@
+@use '@/styles/index' as s;
+
+.footer {
+  margin-top: auto;
+  color: s.$text-contrast;
+  background-color: s.$background-contrast;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: s.gap(10);
+  padding-block: s.gap(16) s.gap(12);
+
+  @include s.glass(s.$width_lg);
+
+  @include s.media_down(lg) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include s.media_down(md) {
+    grid-template-columns: 1fr;
+    gap: s.gap(8);
+    padding-block: s.gap(10) s.gap(8);
+  }
+}
+
+.about {
+  max-width: 360px;
+}
+
+.logo {
+  width: auto;
+  height: 44px;
+  object-fit: contain;
+}
+
+.company {
+  @include s.text_header_2;
+}
+
+.description {
+  margin-top: s.gap(4);
+  color: rgba(255, 255, 255, 0.7);
+
+  @include s.text_body_2;
+}
+
+.socials {
+  display: flex;
+  gap: s.gap(2);
+  margin-top: s.gap(6);
+}
+
+.social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+
+  color: s.$text-contrast;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: s.$br_full;
+  transition: s.$transition;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+  }
+}
+
+.columnTitle {
+  margin-bottom: s.gap(4);
+  color: rgba(255, 255, 255, 0.5);
+
+  @include s.text_overline;
+}
+
+.contacts,
+.legal {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+}
+
+.contact {
+  display: flex;
+  align-items: flex-start;
+  gap: s.gap(2);
+
+  @include s.text_body_2;
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.contactIcon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.legalLink {
+  color: rgba(255, 255, 255, 0.75);
+  transition: s.$transition;
+
+  @include s.text_body_2;
+
+  &:hover {
+    color: s.$text-contrast;
+    text-decoration: underline;
+  }
+}
+
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.bottomInner {
+  display: flex;
+  justify-content: space-between;
+  gap: s.gap(4);
+  padding-block: s.gap(6);
+  color: rgba(255, 255, 255, 0.5);
+
+  @include s.glass(s.$width_lg);
+  @include s.text_caption;
+
+  @include s.media_down(md) {
+    flex-direction: column;
+    gap: s.gap(2);
+  }
+}
+
+.legalName {
+  text-align: right;
+
+  @include s.media_down(md) {
+    text-align: left;
+  }
+}

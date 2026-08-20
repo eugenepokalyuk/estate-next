@@ -1,0 +1,53 @@
+@use '@/styles/index' as s;
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  border-bottom: 1px solid s.$stroke-default;
+
+  &:first-child {
+    border-top: 1px solid s.$stroke-default;
+  }
+}
+
+.question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(4);
+  width: 100%;
+  padding: s.gap(5) 0;
+
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  transition: color s.$transition-duration s.$transition-ease;
+
+  @include s.text_header_3;
+
+  &:hover {
+    color: s.$text-primary;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  color: s.$icon-secondary;
+}
+
+// Анимируем высоту обёртки, а не самого абзаца: у абзаца есть нижний
+// отступ, и на нём анимация дёргалась бы в конце.
+.answerWrap {
+  overflow: hidden;
+}
+
+.answer {
+  padding-bottom: s.gap(5);
+  color: s.$text-secondary;
+  white-space: pre-line;
+
+  @include s.text_body_1;
+}

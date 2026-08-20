@@ -1,0 +1,335 @@
+@use '@/styles/index' as s;
+
+.block {
+  padding-top: s.gap(20);
+
+  @include s.media_down(md) {
+    padding-top: s.gap(12);
+  }
+}
+
+.header {
+  padding-bottom: s.gap(8);
+
+  @include s.glass(s.$width_lg);
+
+  @include s.media_down(md) {
+    padding-bottom: s.gap(6);
+  }
+}
+
+.title {
+  @include s.text_header_1;
+}
+
+.address {
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  margin-top: s.gap(4);
+
+  @include s.text_body_1;
+}
+
+.addressIcon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: s.$icon-primary;
+}
+
+.note {
+  max-width: 640px;
+  margin-top: s.gap(2);
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}
+
+// Карта во всю ширину окна — контейнера здесь намеренно нет.
+.map {
+  z-index: 10;
+
+  width: 100%;
+  background-color: s.$background-secondary;
+
+  @include s.media_down(md) {
+    // Высота из админки рассчитана на широкий экран: на телефоне она
+    // занимала бы несколько экранов прокрутки.
+    height: 320px !important;
+  }
+}
+
+// Запасной вариант, когда ключа API нет или карта не загрузилась.
+.fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: s.gap(2);
+  padding: s.gap(10) var(--gap_side);
+
+  text-align: center;
+  background-color: s.$background-secondary;
+}
+
+.fallbackIcon {
+  width: 32px;
+  height: 32px;
+  color: s.$icon-primary;
+}
+
+.fallbackTitle {
+  @include s.text_header_3;
+}
+
+.fallbackAddress {
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}
+
+.fallbackLink {
+  margin-top: s.gap(2);
+  color: s.$text-primary;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  @include s.text_body_2;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+// === Метка на карте ===
+//
+// Leaflet вставляет метку строкой HTML внутрь divIcon, поэтому весь её
+// вид живёт здесь, а в компоненте остаётся только разметка.
+//
+// Цвет приходит из админки классом-модификатором, который задаёт одну
+// переменную --pin. Красить каждую часть метки отдельным правилом на
+// каждый из пяти цветов — двадцать пять правил вместо пяти.
+
+.pin {
+  position: relative;
+  display: block;
+  width: 28px;
+  height: 38px;
+  cursor: pointer;
+
+  // Метка — кнопка, и это должно быть заметно до клика.
+  transition: transform 0.15s ease-out;
+
+  &:hover,
+  &:focus-visible {
+    // Растём от острия, а не от центра: иначе метка при наведении
+    // отъезжает от точки, которую показывает.
+    transform: scale(1.12);
+    transform-origin: 50% 100%;
+  }
+}
+
+.pinBrand {
+  --pin: #{s.$background-primary};
+}
+
+.pinRed {
+  --pin: #d93025;
+}
+
+.pinGreen {
+  --pin: #1e8e3e;
+}
+
+.pinBlue {
+  --pin: #1a73e8;
+}
+
+.pinDark {
+  --pin: #1f2933;
+}
+
+.pinShape {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+  width: 28px;
+  height: 38px;
+
+  filter: drop-shadow(0 3px 6px rgba(20, 24, 28, 0.4));
+
+  // Капля — цветом из админки, кружок внутри белый. Белая обводка нужна,
+  // чтобы метка читалась и на тёмном лесном массиве, и на светлой
+  // застройке; тень отрывает её от подложки.
+  path {
+    fill: var(--pin);
+    stroke: #ffffff;
+    stroke-width: 2;
+  }
+
+  circle {
+    fill: #ffffff;
+  }
+}
+
+// Расходящийся круг под меткой: взгляд цепляется за движение, и по метке
+// начинают нажимать. Сидит на острие, а не по центру капли.
+.pinPulse {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+
+  width: 14px;
+  height: 14px;
+  margin: 0 0 -7px -7px;
+
+  background-color: var(--pin);
+  border-radius: s.$br_full;
+
+  animation: pin-pulse 2.4s ease-out infinite;
+
+  // Бесконечная анимация в фоне — ровно то, от чего людям с вестибулярными
+  // расстройствами становится плохо. Системную настройку уважаем.
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
+@keyframes pin-pulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(3.6);
+  }
+}
+
+// Подпись рядом с меткой. Абсолютом, чтобы не влиять на размеры иконки:
+// иначе Leaflet сдвинет якорь, и метка перестанет указывать на точку.
+.pinLabel {
+  position: absolute;
+  top: 4px;
+  left: 34px;
+
+  padding: 3px 8px;
+  white-space: nowrap;
+
+  color: s.$text-primary;
+  background-color: rgba(255, 255, 255, 0.94);
+  border-radius: s.$br_2;
+  box-shadow: 0 2px 8px rgba(20, 24, 28, 0.25);
+
+  @include s.text_caption;
+}
+
+// === Выжимка по объекту в окне метки ===
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  margin-top: s.gap(6);
+}
+
+.fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(4);
+  padding: s.gap(3) 0;
+  border-bottom: 1px solid s.$stroke-default;
+
+  &:first-child {
+    border-top: 1px solid s.$stroke-default;
+  }
+}
+
+.factLabel {
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}
+
+.factValue {
+  margin: 0;
+  text-align: right;
+
+  @include s.text_body_1;
+}
+
+.modalNote {
+  margin-top: s.gap(4);
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}
+
+// === Кнопки «Как доехать» ===
+
+.routes {
+  margin-top: s.gap(6);
+}
+
+.routesTitle {
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  margin-bottom: s.gap(3);
+  color: s.$text-default;
+
+  @include s.text_body_2;
+}
+
+.routesIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+
+  color: s.$text-default;
+}
+
+.routesList {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  width: 100%;
+  padding: s.gap(3) s.gap(4);
+
+  background-color: s.$background-secondary;
+  border: 1px solid s.$stroke-default;
+  border-radius: s.$br_3;
+
+  transition: border-color 0.15s ease-out,
+  background-color 0.15s ease-out;
+
+  &:hover,
+  &:focus-visible {
+    background-color: s.$background-default;
+    border-color: s.$text-primary;
+  }
+}
+
+.routeTitle {
+  @include s.text_body_1;
+}
+
+// О новой вкладке человек должен узнать до клика, но читать это каждый
+// раз незачем — поэтому мелким и справа.
+.routeHint {
+  margin-left: auto;
+  color: s.$text-secondary;
+
+  @include s.text_caption;
+}

@@ -1,0 +1,69 @@
+@use '@/styles/index' as s;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: s.$zi_modal;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: s.gap(4);
+
+  background-color: rgba(20, 24, 28, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.card {
+  position: relative;
+  width: min(100%, 480px);
+  // Длинная форма на невысоком экране должна прокручиваться внутри окна,
+  // а не уезжать за его край.
+  max-height: calc(100vh - #{s.gap(8)});
+  overflow-y: auto;
+
+  padding: s.gap(8);
+  background-color: s.$background-default;
+  border-radius: s.$br_4;
+  box-shadow: s.$box-shadow-strong;
+
+  @include s.media_down(md) {
+    padding: s.gap(6);
+  }
+}
+
+.close {
+  position: absolute;
+  top: s.gap(4);
+  right: s.gap(4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  color: s.$icon-secondary;
+  background-color: transparent;
+  border: none;
+  border-radius: s.$br_full;
+  transition: s.$transition;
+
+  &:hover {
+    color: s.$icon-default;
+    background-color: s.$background-secondary;
+  }
+}
+
+.title {
+  padding-right: s.gap(10);
+  @include s.text_header_2;
+}
+
+.description {
+  margin-top: s.gap(2);
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}

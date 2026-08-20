@@ -1,0 +1,125 @@
+@use '@/styles/index' as s;
+
+// === Строки таблицы ===
+
+/* Строку «Площадь — 1 200 м²» нельзя растягивать на все 1280px: между
+   названием и значением получается пустота, которую глаз пересекает
+   заново на каждой строке. Но и обрезать список по 860px, оставляя
+   справа четверть пустого экрана, — значит поставить блок косо
+   относительно соседних, идущих во всю ширину.
+
+   Поэтому на широком экране список идёт в две колонки: строка остаётся
+   короткой и читаемой, а блок занимает ту же ширину, что и остальные.
+   Заодно вдвое укорачивается сам блок — дюжина характеристик перестаёт
+   быть простынёй на пол-экрана. */
+.rows {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: s.gap(10);
+
+  @include s.media_up(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(6);
+  padding: s.gap(4) 0;
+  border-bottom: 1px solid s.$stroke-default;
+
+  &:first-child {
+    border-top: 1px solid s.$stroke-default;
+  }
+
+  /* Верхняя граница нужна первой строке КАЖДОЙ колонки: иначе правая
+     начинается без черты и выглядит съехавшей вверх относительно левой. */
+  @include s.media_up(lg) {
+    &:nth-child(2) {
+      border-top: 1px solid s.$stroke-default;
+    }
+  }
+
+  @include s.media_down(sm) {
+    flex-direction: column;
+    gap: s.gap(1);
+  }
+}
+
+.rowTitle {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+  color: s.$text-secondary;
+
+  @include s.text_body_1;
+}
+
+.rowText {
+  color: s.$text-secondary;
+  opacity: 0.8;
+
+  @include s.text_caption;
+}
+
+.rowValue {
+  margin: 0;
+  text-align: right;
+
+  @include s.text_header_3;
+
+  @include s.media_down(sm) {
+    text-align: left;
+  }
+}
+
+// === Плитки ===
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: s.gap(4);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  padding: s.gap(6);
+
+  background-color: s.$background-default;
+  border-radius: s.$br_3;
+}
+
+.number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: s.gap(2);
+
+  color: s.$text-contrast;
+  background-color: s.$background-primary;
+  border-radius: s.$br_full;
+
+  @include s.text_body_2;
+}
+
+.cardTitle {
+  @include s.text_header_3;
+}
+
+.cardValue {
+  color: s.$text-accent;
+
+  @include s.text_header_3;
+}
+
+.cardText {
+  color: s.$text-secondary;
+
+  @include s.text_body_2;
+}

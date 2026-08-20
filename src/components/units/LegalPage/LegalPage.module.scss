@@ -1,0 +1,101 @@
+@use '@/styles/index' as s;
+
+.main {
+  padding-block: s.gap(12) s.gap(24);
+
+  @include s.glass(760px);
+
+  @include s.media_down(md) {
+    padding-block: s.gap(8) s.gap(16);
+  }
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(2);
+  margin-bottom: s.gap(8);
+  color: s.$text-secondary;
+  transition: s.$transition;
+
+  @include s.text_body_2;
+
+  &:hover {
+    color: s.$text-default;
+  }
+}
+
+.backIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.title {
+  @include s.text_header_1;
+}
+
+.updated {
+  margin-top: s.gap(2);
+  color: s.$text-secondary;
+
+  @include s.text_caption;
+}
+
+.intro {
+  margin-top: s.gap(6);
+
+  @include s.text_body_1;
+}
+
+.section {
+  margin-top: s.gap(10);
+}
+
+.sectionTitle {
+  margin-bottom: s.gap(3);
+
+  @include s.text_header_3;
+}
+
+.paragraph {
+  @include s.text_body_1;
+
+  & + & {
+    margin-top: s.gap(3);
+  }
+}
+
+.list {
+  margin-top: s.gap(3);
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.listItem {
+  position: relative;
+  padding-left: s.gap(5);
+
+  @include s.text_body_1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    background-color: s.$background-accent;
+    border-radius: s.$br_full;
+  }
+}
+
+.link {
+  color: s.$text-primary;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

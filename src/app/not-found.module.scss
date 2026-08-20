@@ -1,0 +1,45 @@
+@use '@/styles/index' as s;
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  gap: s.gap(3);
+  padding: s.gap(20) var(--gap_side);
+  text-align: center;
+}
+
+.code {
+  color: s.$text-accent;
+
+  @include s.text_overline;
+}
+
+.title {
+  @include s.text_header_1;
+}
+
+.text {
+  max-width: 420px;
+  color: s.$text-secondary;
+
+  @include s.text_body_1;
+}
+
+.link {
+  margin-top: s.gap(4);
+  padding: s.gap(3) s.gap(6);
+
+  color: s.$text-contrast;
+  background-color: s.$background-primary;
+  border-radius: s.$br_2;
+  transition: s.$transition;
+
+  @include s.text_button;
+
+  &:hover {
+    background-color: color-mix(in srgb, s.$primary 88%, black);
+  }
+}

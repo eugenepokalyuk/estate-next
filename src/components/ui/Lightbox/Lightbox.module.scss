@@ -1,0 +1,124 @@
+@use '@/styles/index' as s;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: s.$zi_modal;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: s.gap(4);
+
+  /* Темнее, чем у обычной модалки: фотографию должно быть видно, а не фон. */
+  background-color: rgba(10, 12, 14, 0.92);
+}
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: s.gap(3);
+  margin: 0;
+  /* Занимаем всё доступное место: иначе картинка рисуется в натуральную
+     величину отданного next/image файла и на большом экране выглядит
+     маленькой заплаткой посреди пустоты. */
+  width: 100%;
+  height: 100%;
+  max-width: 1600px;
+}
+
+.image {
+  /* Растягиваем по доступной области, но кадр показываем целиком, без
+     обрезки: в просмотрщике важно увидеть всю картинку. */
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: s.$br_2;
+}
+
+.caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: s.gap(3);
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+
+  @include s.text_body_2;
+}
+
+.counter {
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+
+  @include s.text_caption;
+}
+
+.close,
+.arrow {
+  position: absolute;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+
+  color: s.$text-contrast;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: s.$br_full;
+  transition: s.$transition;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.22);
+  }
+}
+
+.close {
+  top: s.gap(4);
+  right: s.gap(4);
+}
+
+.arrow {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.arrowPrev {
+  left: s.gap(4);
+}
+
+.arrowNext {
+  right: s.gap(4);
+}
+
+@include s.media_down(md) {
+  .arrow {
+    /* На узком экране стрелки по бокам накрывают саму картинку —
+       опускаем их вниз, в ряд под кадром. */
+    top: auto;
+    bottom: s.gap(4);
+    transform: none;
+    width: 44px;
+    height: 44px;
+  }
+
+  .arrowPrev {
+    left: calc(50% - #{s.gap(14)});
+  }
+
+  .arrowNext {
+    right: calc(50% - #{s.gap(14)});
+  }
+
+  .figure {
+    /* Оставляем место под ряд стрелок, который на узком экране уезжает вниз. */
+    padding-bottom: s.gap(14);
+  }
+}

@@ -1,0 +1,124 @@
+@use '@/styles/index' as s;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: s.gap(2);
+
+  border: 1px solid transparent;
+  border-radius: s.$br_2;
+  transition: s.$transition;
+
+  @include s.text_button;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Для шапки: в полосе высотой 72px кнопка размера md почти касается
+   верхнего и нижнего края. */
+.sm {
+  padding: s.gap(2) s.gap(4);
+}
+
+.md {
+  padding: s.gap(3) s.gap(5);
+}
+
+.lg {
+  padding: s.gap(4) s.gap(7);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+// === filled ===
+
+.filled {
+  color: s.$text-contrast;
+
+  &.primary {
+    background-color: s.$background-primary;
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, s.$primary 88%, black);
+    }
+  }
+
+  &.accent {
+    background-color: s.$background-accent;
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, s.$accent 88%, black);
+    }
+  }
+
+  &.contrast {
+    background-color: s.$background-contrast;
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, s.$background-contrast 85%, white);
+    }
+  }
+}
+
+// === outlined ===
+
+.outlined {
+  background-color: transparent;
+
+  &.primary {
+    color: s.$text-primary;
+    border-color: s.$stroke-primary;
+
+    &:hover:not(:disabled) {
+      background-color: s.$primary_10;
+    }
+  }
+
+  &.accent {
+    color: s.$text-accent;
+    border-color: s.$accent;
+
+    &:hover:not(:disabled) {
+      background-color: s.$accent_10;
+    }
+  }
+
+  // На тёмной подложке — например, поверх картинки первого блока.
+  &.contrast {
+    color: s.$text-contrast;
+    border-color: rgba(255, 255, 255, 0.6);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.14);
+    }
+  }
+}
+
+// === ghost ===
+
+.ghost {
+  background-color: transparent;
+  border-color: transparent;
+
+  &.primary {
+    color: s.$text-primary;
+  }
+
+  &.accent {
+    color: s.$text-accent;
+  }
+
+  &.contrast {
+    color: s.$text-contrast;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: s.$background-secondary;
+  }
+}

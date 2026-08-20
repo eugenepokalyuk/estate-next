@@ -1,0 +1,102 @@
+// === Gap function ===
+
+@function gap($size) {
+  @return #{$size * 4}px;
+}
+
+// === Colors ===
+//
+// Палитра холодная и сдержанная: на странице коммерческого объекта главное —
+// фотографии и цифры, поэтому фон почти белый, а цвет остаётся кнопкам
+// и акцентам.
+
+$primary: #1b4965; // глубокий синий — акцент бренда
+$primary_10: rgba(27, 73, 101, 0.1);
+$accent: #c08a3e; // тёплая охра — второстепенный акцент, статусы и цена
+$accent_10: rgba(192, 138, 62, 0.1);
+
+$success: #2f7a4d; // «в продаже», успешная отправка формы
+$danger: #b32d2e; // ошибки формы
+
+$text-default: #14181c;
+$text-secondary: #5f6b76;
+$text-primary: $primary;
+$text-accent: $accent;
+$text-contrast: #ffffff;
+
+$icon-default: #14181c;
+$icon-secondary: #5f6b76;
+$icon-primary: $primary;
+$icon-contrast: #ffffff;
+
+$background-default: #ffffff;
+$background-secondary: #f4f6f8;
+$background-primary: $primary;
+$background-accent: $accent;
+$background-contrast: #14181c;
+
+$stroke-default: #dfe4e9;
+$stroke-primary: $primary;
+
+$transition-duration: 0.3s;
+$transition-ease: ease;
+$transition: all $transition-duration $transition-ease;
+$box-shadow: 0 4px 32px 0 rgba(20, 24, 28, 0.08);
+$box-shadow-strong: 0 12px 40px 0 rgba(20, 24, 28, 0.18);
+
+// === Widths ===
+
+$width_lg: 1280px;
+$width_md: 768px;
+$width_sm: 425px;
+$width_xs: 320px;
+
+// === Side gaps ===
+
+$gap_side_lg: 32px;
+$gap_side_md: 24px;
+$gap_side_sm: 16px;
+
+// === Gaps ===
+
+$gap_lg: 20px;
+$gap_md: 16px;
+$gap_sm: 12px;
+
+// === Border radius ===
+
+$br_full: 99999px;
+$br_6: 24px;
+$br_5: 20px;
+$br_4: 16px;
+$br_3: 12px;
+$br_2: 8px;
+$br_1: 4px;
+
+// === Z-index ===
+//
+// Порядок важен: шапка липкая, виджет заявки висит поверх неё, а модалка
+// перекрывает всё. Держим числа здесь, чтобы не расставлять их наугад
+// по компонентам.
+
+$zi_header: 20;
+$zi_fab: 30;
+$zi_modal: 40;
+
+// === Font weights ===
+
+$bold: 700;
+$semi_bold: 600;
+$medium: 500;
+$regular: 400;
+$light: 300;
+
+// === Breakpoints ===
+
+$breakpoints: (
+  xs: 0,
+  sm: 480px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1440px,
+);

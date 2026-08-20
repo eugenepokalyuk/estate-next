@@ -1,0 +1,246 @@
+@use '@/styles/index' as s;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: s.$zi_header;
+
+  background-color: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid s.$stroke-default;
+  backdrop-filter: blur(8px);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: s.gap(6);
+  min-height: 72px;
+  padding-block: s.gap(3);
+
+  @include s.glass(s.$width_lg);
+
+  @include s.media_down(md) {
+    min-height: 64px;
+    gap: s.gap(3);
+    padding-block: s.gap(2);
+  }
+}
+
+.logo {
+  flex-shrink: 0;
+  margin-right: auto;
+}
+
+.logoImage {
+  width: auto;
+  height: 40px;
+  object-fit: contain;
+}
+
+.logoText {
+  @include s.text_header_3;
+}
+
+/* Меню в строку — только на широком экране. На узком его заменяет
+   выпадающая панель ниже: шесть ссылок в строку туда не помещаются. */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: s.gap(6);
+
+  @include s.media_down(lg) {
+    display: none;
+  }
+}
+
+.navLink {
+  position: relative;
+  color: s.$text-secondary;
+  white-space: nowrap;
+  transition: color s.$transition-duration s.$transition-ease;
+
+  @include s.text_body_2;
+
+  /* Подчёркивание выезжает из центра, а не появляется целиком. */
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 1px;
+
+    background-color: s.$primary;
+    transform: scaleX(0);
+    transition: transform s.$transition-duration s.$transition-ease;
+  }
+
+  &:hover {
+    color: s.$text-default;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  flex-shrink: 0;
+}
+
+.cta {
+  @include s.media_down(sm) {
+    // На самом узком экране кнопка вытесняет логотип — там остаётся
+    // плавающая кнопка в углу, её достаточно.
+    display: none;
+  }
+}
+
+.burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  color: s.$icon-default;
+  background-color: transparent;
+  border: none;
+  border-radius: s.$br_2;
+  transition: background-color s.$transition-duration s.$transition-ease;
+
+  &:hover {
+    background-color: s.$background-secondary;
+  }
+
+  @include s.media_down(lg) {
+    display: inline-flex;
+  }
+}
+
+/* Обе иконки лежат друг на друге: подменять элемент не нужно, значит,
+   нечему мигать при переключении. */
+.burgerIcons {
+  position: relative;
+  display: flex;
+  width: 24px;
+  height: 24px;
+}
+
+.burgerIcon {
+  position: absolute;
+  inset: 0;
+  transition:
+    opacity s.$transition-duration s.$transition-ease,
+    transform s.$transition-duration s.$transition-ease;
+}
+
+.burgerIconClose {
+  opacity: 0;
+  transform: rotate(-90deg);
+}
+
+[aria-expanded='true'] {
+  .burgerIcon {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+
+  .burgerIconClose {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+}
+
+.mobileNav {
+  /* Поверх страницы, а не в потоке шапки: иначе раскрытое меню
+     увеличивает высоту липкой шапки и толкает блоки вниз. Контейнером
+     служит сама шапка — она position: sticky. */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+
+  /* Раскрытие через grid-template-rows: 0fr → 1fr. В отличие от анимации
+     height: auto это чистый CSS — высоту не нужно измерять в JS, и
+     анимация не может застрять на нуле. */
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+
+  background-color: s.$background-default;
+  border-top: 1px solid s.$stroke-default;
+  box-shadow: s.$box-shadow;
+
+  transition:
+    grid-template-rows 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+    /* Прячем только после того, как схлопнулись, иначе меню исчезает рывком. */
+    visibility 0s linear 0.26s;
+
+  @include s.media_up(lg) {
+    display: none;
+  }
+}
+
+.mobileNavOpen {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s;
+}
+
+.mobileNavInner {
+  display: flex;
+  flex-direction: column;
+  /* Обязательны для схлопывания грид-строки в ноль. */
+  min-height: 0;
+  overflow: hidden;
+
+  padding-block: s.gap(2);
+
+  @include s.glass(s.$width_lg);
+}
+
+.mobileNavLink {
+  padding: s.gap(3) 0;
+  border-bottom: 1px solid s.$stroke-default;
+
+  /* Ссылки подъезжают по очереди: задержка растёт с индексом, который
+     компонент кладёт в --index. */
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 0.2s s.$transition-ease,
+    transform 0.2s s.$transition-ease,
+    color s.$transition-duration s.$transition-ease;
+
+  @include s.text_body_1;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    color: s.$text-primary;
+  }
+
+  .mobileNavOpen & {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.06s + var(--index) * 0.035s);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobileNav,
+  .mobileNavLink,
+  .burgerIcon {
+    transition-duration: 0s;
+    transition-delay: 0s;
+  }
+}

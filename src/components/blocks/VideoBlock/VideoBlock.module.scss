@@ -1,0 +1,62 @@
+@use '@/styles/index' as s;
+
+.frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  // Пока файл не начал играть и постера нет, на месте видео виден фон
+  // рамки, а не дыра в вёрстке.
+  background-color: s.$background-secondary;
+}
+
+// Высота задаётся в админке — почти те же варианты, что у блока с
+// картинкой, чтобы видео и фотография в начале страницы вели себя
+// одинаково.
+.wide {
+  aspect-ratio: 16 / 9;
+}
+
+.screen {
+  // 100dvh, а не 100vh: на телефоне адресная строка съезжает, и кадр
+  // на 100vh оказывается выше экрана.
+  height: 100dvh;
+
+  @include s.media_down(md) {
+    height: 70dvh;
+  }
+}
+
+.tall {
+  aspect-ratio: 2 / 1;
+
+  @include s.media_down(md) {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.short {
+  aspect-ratio: 3 / 1;
+
+  @include s.media_down(md) {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  // Кадр дрона снят 16:9, а рамка бывает и 2:1, и во весь экран —
+  // вписываем по большей стороне, чтобы не было полей по краям.
+  object-fit: cover;
+}
+
+.caption {
+  padding-block: s.gap(3);
+  color: s.$text-secondary;
+  text-align: center;
+
+  @include s.glass(s.$width_lg);
+  @include s.text_caption;
+}

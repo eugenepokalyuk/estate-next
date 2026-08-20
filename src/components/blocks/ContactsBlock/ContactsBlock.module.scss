@@ -1,0 +1,58 @@
+@use '@/styles/index' as s;
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(8);
+  padding: s.gap(10);
+
+  background-color: s.$background-default;
+  border-radius: s.$br_4;
+
+  @include s.media_down(md) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: s.gap(6);
+    padding: s.gap(6);
+  }
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+}
+
+.manager {
+  color: s.$text-secondary;
+
+  @include s.text_overline;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+
+  @include s.text_body_1;
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: s.$icon-primary;
+}
+
+.phone {
+  @include s.text_header_3;
+}
+
+.button {
+  flex-shrink: 0;
+}
