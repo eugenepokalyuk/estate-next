@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { BlockRenderer } from '@/components/blocks';
 import { Footer, Header, LeadFab, LeadModal } from '@/components/units';
-import { ApiError, getEstateApi } from '@/services/Api';
+import { ApiError, getEstateApi, getEstateListApi } from '@/services/Api';
 import { StoreProvider } from '@/services/Store';
 import { preloadEstateState } from '@/services/Store/preload';
 
@@ -44,11 +44,27 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
+/** Какие страницы объектов собирать.
+ *
+ *  Экспорт статический: страницы, которой нет в этом списке, на сайте не
+ *  существует вовсе — Pages отдаст 404. Список берём из каталога.
+ *
+ *  Отсюда ограничение, которого не было на сервере: объект, снятый с показа
+ *  в каталоге («Показывать в каталоге» выключено), но оставленный
+ *  опубликованным, страницы не получит — каталожный эндпоинт его не отдаёт.
+ *  Раньше такая ссылка работала, её раздавали точечно. Понадобится снова —
+ *  нужен отдельный эндпоинт со списком всех опубликованных slug. */
+export async function generateStaticParams() {
+  const estates = await getEstateListApi();
+
+  return estates.map(({ slug }) => ({ slug }));
+}
+
 /** Страница объекта: шапка, блоки из админки, футер, виджет заявки.
  *
- *  Содержимое собирает сервер и кладёт в стор — блоки должны быть в
- *  разметке сразу. Страница не пререндерится на сборке: правку блока в
- *  админке видно без пересборки (данные кэшируются на минуту). */
+ *  Содержимое собирает сборка и кладёт в стор — блоки должны быть в
+ *  разметке сразу. После правки в админке Django дёргает пересборку
+ *  (core/redeploy.py), поэтому свежесть данных стоит около двух минут. */
 export default async function ObjectPage({ params }: Params) {
   const { slug } = await params;
 

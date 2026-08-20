@@ -9,15 +9,20 @@ const apiUrl = new URL(
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  // Статического экспорта здесь нет намеренно: страница объекта целиком
-  // собирается в админке, и правка блока должна быть видна сразу, а не
-  // после пересборки сайта. Отсюда сервер — Node (или Vercel).
+  // Сайт раздаётся как статика с GitHub Pages, поэтому собираем экспорт в out/.
+  // Правка блока в админке не теряется: Django после сохранения дёргает
+  // repository_dispatch, и Actions пересобирают сайт (см. core/redeploy.py
+  // в estate-api). Задержка — время сборки, около двух минут.
+  output: 'export',
+  // Без слеша на конце Pages отдаёт 404 на /object/severny: он ищет
+  // severny.html, а экспорт кладёт severny/index.html.
+  trailingSlash: true,
   images: {
-    // Next 16 не оптимизирует картинки с приватных адресов — защита от SSRF,
-    // когда адрес приходит извне. У нас источник один и задан переменной,
-    // но локальный Django живёт как раз на 127.0.0.1, поэтому в разработке
-    // запрет снимаем. В проде API на публичном домене, и он остаётся в силе.
-    dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development',
+    // На Pages оптимизатора нет — картинки уезжают как есть. Django жмёт их
+    // сам при загрузке в админку и кладёт webp (см. core/images.py).
+    unoptimized: true,
+    // Проверка источника работает и при выключенной оптимизации, так что
+    // список хостов нужен по-прежнему.
     remotePatterns: [
       {
         protocol: apiUrl.protocol.replace(':', '') as 'http' | 'https',

@@ -1,0 +1,48 @@
+name: CI
+
+# Проверка на пул-реквестах. Без неё автомерж сливал бы что угодно:
+# ветка зелёная не потому, что код рабочий, а потому что никто не смотрел.
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Линтеры
+        run: npm run lint
+
+      - name: Сборка
+        # next build прогоняет и TypeScript — отдельного шага не нужно.
+        # Ошибка типов здесь означает, что на прод она бы не уехала.
+        env:
+          NEXT_PUBLIC_API_URL: https://api.propestate.ru/api/v1/
+          NEXT_PUBLIC_SITE_URL: https://propestate.ru
+        run: npm run build
+
+      - name: Экспорт не пустой
+        # Молча сломанный экспорт выглядит как успешная сборка: out/ есть,
+        # а страниц в нём нет. Проверяем, что собрались главная и объекты.
+        run: |
+          test -f out/index.html || { echo "out/index.html не собрался"; exit 1; }
+          count=$(find out/object -name index.html 2>/dev/null | wc -l | xargs)
+          test "$count" -gt 0 || { echo "не собралось ни одной страницы объекта"; exit 1; }
+          echo "экспорт на месте: $(find out -name '*.html' | wc -l | xargs) страниц, объектов: $count"
+
+      - name: Домен для Pages на месте
+        # Без CNAME в out/ Pages сбрасывает привязку домена при каждом
+        # деплое, и сайт уезжает обратно на github.io.
+        run: |
+          test -f out/CNAME || { echo "out/CNAME пропал"; exit 1; }
+          echo "CNAME: $(cat out/CNAME)"
